@@ -1,0 +1,35 @@
+service: nuxt-serverless-demo
+
+provider:
+  lambdaHashingVersion: 20201221
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  region: ap-northeast-1
+  apiGateway:
+    binaryMediaTypes:
+      - '*/*'
+  environment:
+    # stops telemetry output from nuxt
+    NUXT_TELEMETRY_DISABLED: 1
+  s3:
+    bucketOne:
+      name: nuxt-serverless-demo
+      versioningConfiguration:
+        Status: Enabled
+
+functions:
+  nuxt:
+    timeout: 30
+    handler: app.handler
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
+
+package:
+  patterns:
+    # ensures that the build output gets packaged
+    - .nuxt/**
+
+plugins:
+  - serverless-offline
