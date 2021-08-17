@@ -4,6 +4,7 @@
 
 ```bash
 # install dependencies
+$ npm install -g typescript
 $ npm install
 
 # serve with hot reload at localhost:3000
